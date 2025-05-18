@@ -10,7 +10,7 @@ class EssayController extends Controller
         $texto = $request->input('texto');
 
         $process = proc_open(
-            'python3 /caminho/completo/para/inferencia.py',
+            'python C:\Users\User\Documents\TCC\IA_TCC\inferencia.py',
             [
                 0 => ['pipe', 'r'],  // STDIN
                 1 => ['pipe', 'w'],  // STDOUT
@@ -31,13 +31,11 @@ class EssayController extends Controller
 
             $returnCode = proc_close($process);
 
-            // Log para depuração binária (opcional)
             error_log("Saída bruta: " . bin2hex($output));
 
             if ($returnCode === 0) {
                 \Log::debug('Saída do Python: ' . $output);
 
-                // Força para UTF-8 limpo (até mesmo se estiver bugado)
                 $nota = mb_convert_encoding($output, 'UTF-8', 'UTF-8');
                 $nota = trim($nota);
 
@@ -45,7 +43,6 @@ class EssayController extends Controller
                     return response()->json(['erro' => 'Saída inválida: encoding malformado'], 500);
                 }
 
-                // Resposta como texto formatado, se preferir JSON é só mudar
                 return response("<pre>Output cru do Python:\n" . htmlspecialchars($nota) . "</pre>", 200)
                        ->header('Content-Type', 'text/html; charset=utf-8');
             } else {
