@@ -10,7 +10,7 @@ class EssayController extends Controller
         $texto = $request->input('texto');
 
         $process = proc_open(
-            'python C:\Users\User\Documents\TCC\IA_TCC\inferencia.py',
+            'python ../../IA_TCC/inferencia.py',
             [
                 0 => ['pipe', 'r'],  // STDIN
                 1 => ['pipe', 'w'],  // STDOUT
